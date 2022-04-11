@@ -119,7 +119,7 @@ For illustration purposes we will implement the 'Approve' option with a penaliza
 
 ## Development and testing
 The development and testing environment uses [VS Code](https://code.visualstudio.com/) and [Hardhat](https://hardhat.org/).  
-The source code for this project can be found on [GitHub hedera22](https://github.com/tjdragon/hedera22) for the Solidity code and on [GitHub hedera22-cli](https://github.com/tjdragon/hedera22-cli) for the CLI.
+The source code for this project can be found on [GitHub hedera22](https://github.com/tjdragonhash/hedera22-dlobex) for the Solidity code and on [GitHub hedera22-cli](https://github.com/tjdragonhash/hedera22-cli) for the CLI.
 
 ## Design choices
 [Hedera's contract service](https://hedera.com/smart-contract) is EVM-based, therefore the main contract will be implemented using [Solidity](https://docs.soliditylang.org/).  
@@ -396,7 +396,7 @@ issue limit and market orders.
 Please note the costs for each operation to execute. For example, placing an order costs around 1ℏ, whereas displaying the order book costs around ~ 7ℏ.  
 Other functions could be added to reduce the costs: best buy/sell price (already implemented), last traded buy/sell price, total buy/sell volume, ...
 
-The java source code can be found [there](https://github.com/tjdragon/hedera22-cli) and make sure you read the [readme](https://github.com/tjdragon/hedera22-cli#readme) as well before you start.
+The java source code can be found [there](https://github.com/tjdragonhash/hedera22-cli) and make sure you read the [readme](https://github.com/tjdragonhash/hedera22-cli/blob/main/README.md) as well before you start.
 
 ## Java code
 

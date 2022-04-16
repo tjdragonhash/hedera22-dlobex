@@ -187,6 +187,14 @@ contract DLOBEX is Ownable {
         emit TradingStartedEvent();
     }
 
+    function best_buy_price() public view returns (uint256) {
+        return _buy_prices[0];
+    }
+
+    function best_sell_price() public view returns (uint256) {
+        return _sell_prices[0];
+    }
+
     // Returns either buy or sell prices - remember those are sorted on insert
     function prices_by_verb(bool is_buy) private view returns (uint256[] storage) {
         if (is_buy) {

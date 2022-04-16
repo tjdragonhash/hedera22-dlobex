@@ -23,8 +23,6 @@ Features implemented in this project:
 - A trade implementation using the ERC20 approve method with a penalizing system should the user misbehave
 - A [CLI](https://en.wikipedia.org/wiki/Command-line_interface) to interact with the Smart Contract written in Java
 - Support for HSM ([Hardware Security Module](https://en.wikipedia.org/wiki/Hardware_security_module))
-- [May Be] An entitlement system with multi-signature for authentication and authorisation
-- [May Be] A link to an Automated Market Maker contract whose inflection point is determined by the last traded price
 
 ## Definitions
 ### CLOB
@@ -92,7 +90,7 @@ Once a trade has happened between two parties, those parties have to deliver. Po
 when Bob sends 50 HBAR to Alice, Alice must send 25600 Satoshis to Bob.  
 
 There are several approaches to this. Let's discuss the different options.  
-There are pros and cons for each approach, but conceptually, either a user delegates the asset to the smart contract for settlement purposes (but also require the smart contract to allow withdrawal of that asset), or the user keeps the ownership of that asset but allows the smart contract, via ERC20's method 'approve', to transfer that asset (with the drawback that the user couldtransfer this asset prior to settlement failing the transfer should a trade happen!)
+There are pros and cons for each approach, but conceptually, either a user delegates the asset to the smart contract for settlement purposes (but also require the smart contract to allow withdrawal of that asset), or the user keeps the ownership of that asset but allows the smart contract, via ERC20's method 'approve', to transfer that asset (with the drawback that the user could transfer this asset prior to settlement failing the transfer should a trade happen!)
 
 ### Delegation to the Smart Contract via Approve
 The ERC20 'Approve' method allows an asset owner to delegate the ability to transfer said asset to a third-party.  
@@ -472,6 +470,10 @@ Such a Rule could implement a simple tree structure with OR/AND, and once evalua
 - Implement FATF-16 by default for native HBARs.
 - Implement Maker-Checker by default.
 - Port Uniswap to Hedera
+- An entitlement system with multi-signature for authentication and authorisation
+- A link to an Automated Market Maker contract whose inflection point is determined by the last traded price
+- More functions to facilitate price discovery while reducing costs
+- Define a Rule Book - and have legal go over it
 
 Many thanks
 

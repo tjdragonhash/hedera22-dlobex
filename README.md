@@ -463,13 +463,18 @@ One way to achieve this would be by the use of [ScheduleCreateTransaction](https
 There is room for improvement, where setKey should be augmented with a Rule to be evaluated at runtime.  
 Such a Rule could implement a simple tree structure with OR/AND, and once evaluated to true, the transaction would go through.  
 
+## Proof-Of-Transactions
+- [Operator](https://testnet.dragonglass.me/hedera/accounts/0.0.7599)
+- [Participant 1](https://testnet.dragonglass.me/hedera/accounts/0.0.34127055)
+- [Participant 2](https://testnet.dragonglass.me/hedera/accounts/0.0.34127057)
+
 ## Improvements & Fun things to do
 - The Solidity code is not optimized and lots of careful love is required to make it more gas-efficient.  
 - Build a web site to display the order book and integrate with a Metamask-like plugin and/or integrate with a Nano ledger.
 - Use the average buy/sell order prices post trade as a dynamic inflection point for AMM implementations.
 - Implement FATF-16 by default for native HBARs.
 - Implement Maker-Checker by default.
-- Port Uniswap to Hedera
+- Port Uniswap to Hedera for fun
 - An entitlement system with multi-signature for authentication and authorisation
 - A link to an Automated Market Maker contract whose inflection point is determined by the last traded price
 - More functions to facilitate price discovery while reducing costs

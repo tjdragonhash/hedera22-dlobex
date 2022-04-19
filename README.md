@@ -442,6 +442,170 @@ Please refer to [Hedera Services](https://github.com/hashgraph/hedera-services)
 
 ## Support for HSM
 
+A [HSM is a hardware security module](https://en.wikipedia.org/wiki/Hardware_security_module) is a physical computing device that safeguards and manages digital keys, 
+performs encryption and decryption functions for digital signatures.  
+Securing private keys is obviously critical for digital assets, but using a [hardened OS](https://www.cysec.com/arca/) to run services is equally important in order to protect the application's business logic as well as to perform various security segmentations between various parts of the application.
+
+I will demonstrated the use of [Cysec's Hardened OS Cryptography capabilities](https://www.cysec.com/key-capabilities/) (with the use of a HSM)
+to implement the support for [Hedera's HBAR](https://hedera.com/).  
+[Cysec](https://www.cysec.com/) recently made the [Cryptographic API documentation](https://api.docs.cysec.com/) available - and we will use that API to create 
+an account, perform native transfers and invoke smart contract methods.
+
+### Master Seed
+The following section describes the process of a creation of a wallet, starting with the master seed,  required for a deterministic public key generation.  
+Please note that for Hedera - we do not need key derivation per se.
+
+[Cysec's API](https://api.docs.cysec.com/) is based on [Google's ProtoBuf](https://developers.google.com/protocol-buffers).  
+
+### Seed Generation
+```java
+import arcaos.api.crypto.Wallet;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
+public static void generateWalleSeedRequest(final SubtleCryptoGrpc.SubtleCryptoBlockingStub client, final String seedPath) throws IOException {
+    final Wallet.GenerateWalletSeedRequest reqSeed = Wallet.GenerateWalletSeedRequest.newBuilder().setLength(32).build();
+    final Wallet.GenerateWalletSeedResponse respSeed = client.generateWalletSeed(reqSeed);
+    final byte[] wrappedSeed = respSeed.getWrappedSeed().toByteArray();
+    Files.write(Paths.get(seedPath), wrappedSeed);
+}
+```
+
+### Hedera Public Key
+
+The next step is to derive the public component from the seed.  
+[Hedera](https://hedera.com/) uses the [Edwards Curve](https://en.wikipedia.org/wiki/Edwards_curve) represented below using the string 'ED25519'.  
+[Slip10](https://github.com/satoshilabs/slips/blob/master/slip-0010.md) being the Universal private key derivation from master private key.  
+
+
+We first start with the wallet master key derivation, from which we obtain a key id (a reference).
+```java
+import arcaos.api.crypto.Wallet;
+
+final byte[] wrappedSeed = Files.readAllBytes(Paths.get("./hedera.seed"));
+final Wallet.DeriveWalletMasterKeyRequest deriveWalletMasterKeyRequest =
+        Wallet.DeriveWalletMasterKeyRequest.newBuilder()
+            .setAlgorithm("SLIP10_ED25519")
+            .addWhitelist("EDDSA_PURE")
+            .setWrapped(ByteString.copyFrom(wrappedSeed))
+        .build();
+final Wallet.DeriveWalletMasterKeyResponse deriveWalletMasterKeyResponse = client.deriveWalletMasterKey(deriveWalletMasterKeyRequest);
+final String keyId = deriveWalletMasterKeyResponse.getKeyId();
+```
+
+With the key id, we obtain the public component:
+
+```java
+import arcaos.api.crypto.Public;
+
+final Public.GetPublicComponentRequest getPublicComponentRequest = Public.GetPublicComponentRequest.newBuilder().setKeyId(keyId).build();
+final Public.GetPublicComponentResponse publicComponent = cysecClient.getPublicComponent(getPublicComponentRequest);
+final byte[] publicKeyBytes = publicComponent.getPublic().toByteArray();
+```
+
+This public component is a raw cryptographic public component. We need to slightly transform this component to be compliant with Hedera.  
+The following function takes the previous 'publicKeyBytes' and returns another formatted set of bytes for Hedera using [BouncyCastle](https://www.bouncycastle.org/):
+
+```java
+import org.bouncycastle.asn1.ASN1InputStream;
+import org.bouncycastle.asn1.ASN1Primitive;
+import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
+import org.bouncycastle.jcajce.provider.asymmetric.edec.BCEdDSAPublicKey;
+
+public static byte[] publicKeyData(final byte[] publicKeyBytes) throws IOException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    final ASN1Primitive asn1Primitive = toAsn1Primitive(publicKeyBytes);
+    final SubjectPublicKeyInfo subjectPublicKeyInfo = SubjectPublicKeyInfo.getInstance(asn1Primitive);
+
+    final Constructor<BCEdDSAPublicKey> bcEdDSAPublicKeyConstructor = BCEdDSAPublicKey.class.getDeclaredConstructor(SubjectPublicKeyInfo.class);
+    bcEdDSAPublicKeyConstructor.setAccessible(true);
+    final BCEdDSAPublicKey bcEdDSAPublicKey = bcEdDSAPublicKeyConstructor.newInstance(subjectPublicKeyInfo);
+    final byte[] publicKeyData = bcEdDSAPublicKey.getPointEncoding();
+    return publicKeyData;
+}
+```
+
+Finally, we can create the Hedera public key:
+
+```java
+final com.hedera.hashgraph.sdk.PublicKey publicKey = com.hedera.hashgraph.sdk.PublicKey.fromBytes(publicKeyData);
+```
+
+### Hedera account creation
+Without going to the complexities of the Genesis accounts creation, we will focus on account creation with [Cysec's API](https://api.docs.cysec.com/).  
+We will modify the pure software [account creation example](https://github.com/hashgraph/hedera-sdk-java/blob/main/examples/src/main/java/CreateAccountExample.java) and insert the remote HSM signing code.  
+We will go through this step-by-step:
+
+Contrary to the Hedera example, the following code freezes (_freezeWith_) the AccountCreateTransaction to be signed by another function (_signWithHsm_):
+
+```java
+private static void createAccount(final Client hederaClient, final PublicKey operatorPublicKey, final PublicKey newAccountPublicKey) throws PrecheckStatusException, TimeoutException, ReceiptStatusException {
+    final TransactionResponse transactionResponse = new AccountCreateTransaction()
+        .setReceiverSignatureRequired(false)
+        .setKey(newAccountPublicKey)
+        .freezeWith(hederaClient)
+        .signWith(operatorPublicKey, signWithHsm())
+        .execute(hederaClient);
+    
+    final TransactionReceipt transactionReceipt = transactionResponse.getReceipt(hederaClient);
+}
+```
+
+### Signing
+
+The signing part takes place in the HSM using [EdDSA](https://en.wikipedia.org/wiki/EdDSA):
+
+```java
+import arcaos.api.crypto.Sign;
+
+private static Function<byte[],byte[]> signWithHsm() {
+    return (
+            CreateHSMAccountDemo::sign
+        );
+}
+
+private static byte[] sign(final byte[] data) {
+    try {
+        final Sign.SignRequest signRequest = Sign.SignRequest.newBuilder()
+            .setData(ByteString.copyFrom(data))
+            .setAlgorithm("EDDSA_PURE")
+            .setKeyId(operatorKeyId)
+        .build();
+        final Sign.SignResponse signResponse = cysecClient.sign(signRequest);
+        final byte[] rawSignature = signResponse.getSignature().toByteArray();
+        
+        return rawSignature;
+    } catch (Exception e) {
+        throw new RuntimeException(e);
+    }
+}
+```
+
+### Transfers
+Signing is the same logic, transfers are simply:
+
+```java
+final TransactionResponse transactionResponse = new TransferTransaction()
+        .addHbarTransfer(operatorId, amount.negated())
+        .addHbarTransfer(recipientId, amount)
+        .setTransactionMemo("TJ Transfer Test")
+        .freezeWith(hederaClient)
+        .signWith(operatorPublicKey, signWithHsm())
+        .execute(hederaClient);
+```
+
+### Transfers
+Signing is the same logic, transfers are simply:
+
+```java
+final TransactionResponse transactionResponse = new TransferTransaction()
+        .addHbarTransfer(operatorId, amount.negated())
+        .addHbarTransfer(recipientId, amount)
+        .setTransactionMemo("TJ Transfer Test")
+        .freezeWith(hederaClient)
+        .signWith(operatorPublicKey, signWithHsm())
+        .execute(hederaClient);
+```
+
 ## Hedera's readiness for FATF-16
 [FATF](https://www.fatf-gafi.org/publications/fatfrecommendations/documents/fatf-recommendations.html) *recommendations set out a comprehensive and consistent framework of measures which countries should implement in order to combat money laundering and terrorist financing, as well as the financing of proliferation of weapons of mass destruction.*  
 There are several initiatives at work, namely [TRP](https://www.travelruleprotocol.org/), [OpenVASP](https://openvasp.org/) and 

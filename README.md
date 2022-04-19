@@ -446,7 +446,7 @@ A [HSM is a hardware security module](https://en.wikipedia.org/wiki/Hardware_sec
 performs encryption and decryption functions for digital signatures.  
 Securing private keys is obviously critical for digital assets, but using a [hardened OS](https://www.cysec.com/arca/) to run services is equally important in order to protect the application's business logic as well as to perform various security segmentations between various parts of the application.
 
-I will demonstrated the use of [Cysec's Hardened OS Cryptography capabilities](https://www.cysec.com/key-capabilities/) (with the use of a HSM)
+I will demonstrate the use of [Cysec's Hardened OS Cryptography capabilities](https://www.cysec.com/key-capabilities/) (with the use of a HSM)
 to implement the support for [Hedera's HBAR](https://hedera.com/).  
 [Cysec](https://www.cysec.com/) recently made the [Cryptographic API documentation](https://api.docs.cysec.com/) available - and we will use that API to create 
 an account, perform native transfers and invoke smart contract methods.
@@ -578,19 +578,6 @@ private static byte[] sign(final byte[] data) {
         throw new RuntimeException(e);
     }
 }
-```
-
-### Transfers
-Signing is the same logic, transfers are simply:
-
-```java
-final TransactionResponse transactionResponse = new TransferTransaction()
-        .addHbarTransfer(operatorId, amount.negated())
-        .addHbarTransfer(recipientId, amount)
-        .setTransactionMemo("TJ Transfer Test")
-        .freezeWith(hederaClient)
-        .signWith(operatorPublicKey, signWithHsm())
-        .execute(hederaClient);
 ```
 
 ### Transfers

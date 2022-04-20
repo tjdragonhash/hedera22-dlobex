@@ -617,6 +617,17 @@ Such a Rule could implement a simple tree structure with OR/AND, and once evalua
 - [Participant 1](https://testnet.dragonglass.me/hedera/accounts/0.0.34127055)
 - [Participant 2](https://testnet.dragonglass.me/hedera/accounts/0.0.34127057)
 
+## Videos
+- [Submission Video](https://www.youtube.com/watch?v=wUS9QRMryqU)
+- [Deploy ERC20s]()
+- [Deploy DLOBex]()
+- [Transfers & Approve]()
+- [CLI]()
+- [Limit Orders]()
+- [Matching Orders]()
+- [Market Orders]()
+- [Solidity]()
+
 ## Improvements & Fun things to do
 - The Solidity code is not optimized and lots of careful love is required to make it more gas-efficient.  
 - Build a web site to display the order book and integrate with a Metamask-like plugin and/or integrate with a Nano ledger.

@@ -398,20 +398,18 @@ The java source code can be found [there](https://github.com/tjdragonhash/hedera
 
 ## Java code
 
-Java code to interact with Hedera in TESTNET
-Before you start
-Accounts
-Using your operator account and private (Set them in Accounts), create two other accounts for the participants and update the Accounts.java file. Use CreateAccount to create them
+### Before you start
+Use the CreateAccount code to create the relevant accounts and set the account ids and private keys in the relevant Java classes.
 
-Deploy the contracts
+### Deploy the contracts
 Use DeployERC20 twice with the relevant token info (name, supply) and DeployDLOBEx for the main smart contract.
 Note the deployment uses testnet and use your operator account.
 
-Transfer some native HBARs to the participants
+### Transfer some native HBARs to the participants
 For the participants to be able to interact with the native chain, transfer some native HBARs to them using TransferHBARs.
 You can then use CLI with the option "Display balances" to confirm.
 
-Transfer some tokens to the participants.
+### Transfer some tokens to the participants.
 Same as above, but using TransferTokens
 
 You should see on the CLI:
@@ -625,7 +623,7 @@ Such a Rule could implement a simple tree structure with OR/AND, and once evalua
 - Use the average buy/sell order prices post trade as a dynamic inflection point for AMM implementations.
 - Implement FATF-16 by default for native HBARs.
 - Implement Maker-Checker by default.
-- Port Uniswap to Hedera for fun
+- Port Uniswap to Hedera
 - An entitlement system with multi-signature for authentication and authorisation
 - A link to an Automated Market Maker contract whose inflection point is determined by the last traded price
 - More functions to facilitate price discovery while reducing costs

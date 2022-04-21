@@ -24,6 +24,9 @@ Features implemented in this project:
 - A [CLI](https://en.wikipedia.org/wiki/Command-line_interface) to interact with the Smart Contract written in Java
 - Support for HSM ([Hardware Security Module](https://en.wikipedia.org/wiki/Hardware_security_module))
 
+The goal is to encourage discussions on how to bridge traditional finance and public blockchains, not to advocate a model (AMM) vs another (CLOB), to simply realize that a convergence
+is easier to achieve, and new models could help making markets more efficient, more transparent by reducing risk and increase visibility.
+
 ## Definitions
 ### CLOB
 A central limit order book is a usually represented as a bi-directional ladder, each side representing the buys and sells.

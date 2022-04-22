@@ -620,6 +620,9 @@ Such a Rule could implement a simple tree structure with OR/AND, and once evalua
 
 ![Set-Up](./set-up.png)
 
+## Orders
+![Set-Up](./orders.png)
+
 ## Proof-Of-Transactions
 - [Operator](https://testnet.dragonglass.me/hedera/accounts/0.0.34260914)
 - [Participant 1](https://testnet.dragonglass.me/hedera/accounts/0.0.34260933)

@@ -613,7 +613,12 @@ can sign the incoming transfer for it to be effective.
 All financial systems implement the concept of [Maker-Checker](https://en.wikipedia.org/wiki/Maker-checker).  
 One way to achieve this would be by the use of [ScheduleCreateTransaction](https://github.com/hashgraph/hedera-sdk-java/blob/main/examples/src/main/java/ScheduleMultiSigTransactionExample.java) although this process requires n-of-n signers as opposed to the more flexible n-of-m.  
 There is room for improvement, where setKey should be augmented with a Rule to be evaluated at runtime.  
-Such a Rule could implement a simple tree structure with OR/AND, and once evaluated to true, the transaction would go through.  
+Such a Rule could implement a simple tree structure with OR/AND, and once evaluated to true, the transaction would go through. 
+
+# Flows
+## Set-Up
+
+![Set-Up](./set-up.png)
 
 ## Proof-Of-Transactions
 - [Operator](https://testnet.dragonglass.me/hedera/accounts/0.0.34260914)

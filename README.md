@@ -70,6 +70,8 @@ Buy         Sell
 200 @ 509	.
 ```
 
+The concept is to trade wrapped ERC20 tokens for assets such as ETH & BTC, but native ERC20 tokens for the ones issued directly on Hedera.
+
 ## Order Types
 This project implements two order types: a **Market Order** and a **Limit Order**.
 

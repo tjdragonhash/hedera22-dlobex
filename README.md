@@ -632,14 +632,14 @@ Such a Rule could implement a simple tree structure with OR/AND, and once evalua
 
 ## Videos
 - [Submission Video](https://www.youtube.com/watch?v=wUS9QRMryqU)
-- [Deploy ERC20s]()
-- [Deploy DLOBex]()
-- [Transfers & Approve]()
-- [CLI]()
-- [Limit Orders]()
-- [Matching Orders]()
-- [Market Orders]()
-- [Solidity]()
+- [Deploy ERC20s](https://www.youtube.com/watch?v=hutPliBM_kI)
+- [Deploy DLOBex](https://www.youtube.com/watch?v=p0hCeUm1xFg)
+- [Transfers & Approve](https://www.youtube.com/watch?v=7OE_ev3iAiI)
+- [CLI](https://www.youtube.com/watch?v=HBbOGPtmNiI)
+- [Limit Orders](https://www.youtube.com/watch?v=coC7sX-doEY)
+- [Matching Orders](https://www.youtube.com/watch?v=ED-gsX_hQL4)
+- [Market Orders](https://www.youtube.com/watch?v=qXK7iTOmIJU)
+- [Solidity](https://www.youtube.com/watch?v=8F9hGq5xNko)
 
 ## Improvements & Fun things to do
 - The Solidity code is not optimized and lots of careful love is required to make it more gas-efficient.  
@@ -652,7 +652,8 @@ Such a Rule could implement a simple tree structure with OR/AND, and once evalua
 - A link to an Automated Market Maker contract whose inflection point is determined by the last traded price
 - More functions to facilitate price discovery while reducing costs
 - Define a Rule Book - and have legal go over it
+- Define a registry for all DLOBex pairs to reuse existing contracts as opposed to create new instances for the same pair
 
 Many thanks
 
-TJ-Dragon-Hash
+TJ - tjdragonhash@gmail.com

@@ -25,7 +25,9 @@ Features implemented in this project:
 - Support for HSM ([Hardware Security Module](https://en.wikipedia.org/wiki/Hardware_security_module))
 
 The goal is to encourage discussions on how to bridge traditional finance and public blockchains, not to advocate a model (AMM) vs another (CLOB), to simply realize that a convergence
-is easier to achieve, and new models could help making markets more efficient, more transparent by reducing risk and increase visibility.
+is easier to achieve, and new models could help making markets more efficient, more transparent by reducing risk and increase visibility.  
+ERC20s in this model can represent any asset, they do not have to be electronic, they could represent a real world asset, reducing the cost for production, distribution and consumption.  
+Furthermore, DLOBex brings transparency to execution and settlement, improving pricing.
 
 ## Definitions
 ### CLOB
@@ -653,6 +655,8 @@ Such a Rule could implement a simple tree structure with OR/AND, and once evalua
 - More functions to facilitate price discovery while reducing costs
 - Define a Rule Book - and have legal go over it
 - Define a registry for all DLOBex pairs to reuse existing contracts as opposed to create new instances for the same pair
+- Sorting is done by price, include time.
+- Introduce netting
 
 Many thanks
 

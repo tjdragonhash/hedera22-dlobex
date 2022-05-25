@@ -11,6 +11,12 @@ A [CLOB FIFO](https://en.wikipedia.org/wiki/Order_matching_system) is a typical 
 
 The above is the reason why we have not seen decentralized CLOB in existing DEXs... until [Hedera](https://hedera.com/hh-ieee_coins_paper-200516.pdf).
 
+Update:
+
+- [Serum: Return of the Order Book](https://messari.io/article/serum-return-of-the-order-book)
+- [Another Leading DEX Is Choosing the Order Book Mechanism](https://beincrypto.com/another-leading-dex-is-choosing-the-order-book-mechanism/)
+
+
 DLOBex stands for **D**istributed **L**imit **O**rder **B**ook **ex**change.
 
 Hedera's consensus is fast and settlement finality is deterministic. 
